@@ -19,6 +19,7 @@ export function login(email, passwordHash) {
       // 请求失败
       // console.log(error);
       // alert(2);
+    //   alert(JSON.stringify(error))
       reject(error);
   })
   })
@@ -86,6 +87,31 @@ export function getUserInfo(token) {
     
   })
 }
+export function getUserById(userID) {
+    return new Promise((resolve, reject) =>{
+  
+        axios.get('/api/user/'+userID)
+        .then(response => {
+            // post 成功，response.data 为返回的数据
+            // console.log(response.data);
+            // alert(1);
+
+            // alert(JSON.stringify(response))
+            resolve(response);
+
+            
+        })
+        .catch(error => {
+            // 请求失败
+            // console.log(error);
+            // alert(2);
+            // alert(('/api/user/'+userId))
+            reject(error);
+        })
+  
+      
+    })
+  }
 
 export function register(email, nickname, passwordHash) {
   const data = {
@@ -119,6 +145,7 @@ export function register(email, nickname, passwordHash) {
         // 请求失败
         // console.log(error);
         // alert(2);
+        // alert(JSON.stringify(error))
         reject(error);
     })
   })

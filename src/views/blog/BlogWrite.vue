@@ -8,7 +8,7 @@
         <el-col :span="4" :offset="6">
           <div class="me-write-btn">
             <!-- <el-button round @click="publishShow">发布</el-button> -->
-            <el-button round @click="publish">发布</el-button>
+            <el-button round @click="publishShow">{{oktxt}}</el-button>
             <el-button round @click="cancel">取消</el-button>
           </div>
         </el-col>
@@ -31,13 +31,13 @@
         </el-main>
       </el-container>
 
-      <el-dialog title="摘要 分类 标签"
+      <el-dialog title="请选择标签"
                  :visible.sync="publishVisible"
                  :close-on-click-modal=false
                  custom-class="me-dialog">
 
         <el-form :model="articleForm" ref="articleForm" :rules="rules">
-          <el-form-item prop="summary">
+          <!-- <el-form-item prop="summary">
             <el-input type="textarea"
                       v-model="articleForm.summary"
                       :rows="6"
@@ -48,17 +48,17 @@
             <el-select v-model="articleForm.category" value-key="id" placeholder="请选择文章分类">
               <el-option v-for="c in categorys" :key="c.id" :label="c.categoryname" :value="c"></el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
 
           <el-form-item label="文章标签" prop="articleTags">
             <el-checkbox-group v-model="articleForm.articleTags">
-              <el-checkbox v-for="t in articleTags" :key="t.id" :label="t.id" name="articleTags">{{t.tagname}}</el-checkbox>
+              <el-checkbox v-for="t in articleTags" :key="t.tagId" :label="t.tagId" name="articleTags">{{t.tagName}}</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="publishVisible = false">取 消</el-button>
-          <el-button type="primary" @click="publish('articleForm')">发布</el-button>
+          <el-button type="primary" @click="publish(articleForm)">发布</el-button>
         </div>
       </el-dialog>
     </el-container>
@@ -68,16 +68,19 @@
 <script>
   import BaseHeader from '@/views/BaseHeader'
   import MarkdownEditor from '@/components/markdown/MarkdownEditor'
-  import {publishArticle, getArticleById} from '@/api/article'
+  import {publishArticle, getArticleById,editArticle} from '@/api/article'
   import {getAllCategorys} from '@/api/category'
   import {getAllTags} from '@/api/tag'
   import {getToken} from '@/request/token'
+  import {addTagForArticles} from '@/api/tag'
 
   export default {
     name: 'BlogWrite',
     mounted() {
 
       if(this.$route.params.id){
+        this.isEditMode=true
+        this.oktxt='保存'
         this.getArticleById(this.$route.params.id)
       }
 
@@ -92,7 +95,9 @@
     data() {
       return {
         publishVisible: false,
+        isEditMode:false,
         categorys: [],
+        oktxt:'发布',
         articleTags: [],
         articleForm: {
           articleId: '',
@@ -131,13 +136,13 @@
           }
         },
         rules: {
-          summary: [
-            {required: true, message: '请输入摘要', trigger: 'blur'},
-            {max: 80, message: '不能大于80个字符', trigger: 'blur'}
-          ],
-          category: [
-            {required: true, message: '请选择文章分类', trigger: 'change'}
-          ],
+          // summary: [
+          //   {required: true, message: '请输入摘要', trigger: 'blur'},
+          //   {max: 80, message: '不能大于80个字符', trigger: 'blur'}
+          // ],
+          // category: [
+          //   {required: true, message: '请选择文章分类', trigger: 'change'}
+          // ],
           articleTags: [
             {type: 'array', required: true, message: '请选择标签', trigger: 'change'}
           ]
@@ -146,7 +151,7 @@
     },
     computed: {
       title (){
-        return '写文章 - For Fun'
+        return '写文章'
       }
     },
     methods: {
@@ -171,6 +176,7 @@
         })
       },
       publishShow() {
+        // alert("end:"+JSON.stringify(this.articleForm.articleTags));
         if (!this.articleForm.title) {
           this.$message({message: '标题不能为空哦', type: 'warning', showClose: true})
           return
@@ -185,11 +191,18 @@
           this.$message({message: '内容不能为空哦', type: 'warning', showClose: true})
           return
         }
-
-        this.publishVisible = false;
+        if(this.isEditMode==true){
+          this.edit(this.articleForm)
+        }
+        else{
+          this.publishVisible = true;
+        }
+        
       },
-      publish(articleForm) {
+      edit(articleForm){
+
         let that = this
+        // alert(this.articleId)
         let article = {
               title: this.articleForm.title,
               content: this.articleForm.editor.value,
@@ -204,13 +217,83 @@
               // }
 
             }
-          // alert(1)
-          let loading = this.$loading({
+
+            this.publishVisible = false;
+
+            let loading = this.$loading({
               lock: true,
               text: '发布中，请稍后...'
             })
-        publishArticle(article,getToken()).then((data) => {
+          // alert(JSON.stringify(this.articleForm.articleTags))
+           editArticle(article,getToken(),this.articleForm.articleId).then((data) => {
+            //  this.articleForm.articleTags.map(function(t,index){
+            //     //  alert(JSON.stringify(t))
+            //                 addTagForArticles(data.data.data.articleId,t,getToken()).then((data) => {
+            //                   // alert("ok")
+            //               }).catch((error) => {
+            //                 // alert("bad")
+            //                 loading.close();
+                            
+            //                 if (error !== 'error') {
+            //                   that.$message({message: error, type: 'error', showClose: true});
+            //                 }
+            //               })
+            //   });
+
+              loading.close();      
+              that.$message({message: '修改成功啦', type: 'success', showClose: true})
+              that.$router.push({path: `/view/${data.data.data.articleId}`})
+
+            }).catch((error) => {
               loading.close();
+              
+              if (error !== 'error') {
+                that.$message({message: error, type: 'error', showClose: true});
+              }
+            })
+      },
+      publish(articleForm) {
+
+        let that = this
+
+        let article = {
+              title: this.articleForm.title,
+              content: this.articleForm.editor.value,
+              // articleId: this.articleForm.articleId,
+              
+              // summary: this.articleForm.summary,
+              // category: this.articleForm.category,
+              // articleTags: articleTags,
+              // body: {
+                
+              //   contentHtml: this.articleForm.editor.ref.d_render
+              // }
+
+            }
+
+            this.publishVisible = false;
+
+            let loading = this.$loading({
+              lock: true,
+              text: '发布中，请稍后...'
+            })
+          // alert(JSON.stringify(this.articleForm.articleTags))
+           publishArticle(article,getToken()).then((data) => {
+             this.articleForm.articleTags.map(function(t,index){
+                //  alert(JSON.stringify(t))
+                            addTagForArticles(data.data.data.articleId,t,getToken()).then((data) => {
+                              // alert("ok")
+                          }).catch((error) => {
+                            // alert("bad")
+                            loading.close();
+                            
+                            if (error !== 'error') {
+                              that.$message({message: error, type: 'error', showClose: true});
+                            }
+                          })
+              });
+
+              loading.close();      
               that.$message({message: '发布成功啦', type: 'success', showClose: true})
               that.$router.push({path: `/view/${data.data.data.articleId}`})
 
@@ -221,6 +304,41 @@
                 that.$message({message: error, type: 'error', showClose: true});
               }
             })
+
+
+
+        // let that = this
+        // let article = {
+        //       title: this.articleForm.title,
+        //       content: this.articleForm.editor.value,
+        //       // articleId: this.articleForm.articleId,
+              
+        //       // summary: this.articleForm.summary,
+        //       // category: this.articleForm.category,
+        //       // articleTags: articleTags,
+        //       // body: {
+                
+        //       //   contentHtml: this.articleForm.editor.ref.d_render
+        //       // }
+
+        //     }
+        //   // alert(1)
+        //   let loading = this.$loading({
+        //       lock: true,
+        //       text: '发布中，请稍后...'
+        //     })
+        // publishArticle(article,getToken()).then((data) => {
+        //       loading.close();
+        //       that.$message({message: '发布成功啦', type: 'success', showClose: true})
+        //       that.$router.push({path: `/view/${data.data.data.articleId}`})
+
+        //     }).catch((error) => {
+        //       loading.close();
+              
+        //       if (error !== 'error') {
+        //         that.$message({message: error, type: 'error', showClose: true});
+        //       }
+        //     })
 
         // let that = this
 
@@ -282,21 +400,24 @@
       },
       getCategorysAndTags() {
         let that = this
-        getAllCategorys().then(data => {
-          that.categorys = data.data
-        }).catch(error => {
-          if (error !== 'error') {
-            that.$message({type: 'error', message: '文章分类加载失败', showClose: true})
-          }
-        })
-
+        // getAllCategorys().then(data => {
+        //   that.categorys = data.data
+        // }).catch(error => {
+        //   if (error !== 'error') {
+        //     that.$message({type: 'error', message: '文章分类加载失败', showClose: true})
+        //   }
+        // })
+        // alert("in");
         getAllTags().then(data => {
-          that.articleTags = data.data
+          that.articleTags = data.data.data
+          // alert("ok:"+JSON.stringify(data));
         }).catch(error => {
+          // alert("error:"+JSON.stringify(error));
           if (error !== 'error') {
             that.$message({type: 'error', message: '标签加载失败', showClose: true})
           }
         })
+        
 
       },
       editorToolBarToFixed() {

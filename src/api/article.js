@@ -33,7 +33,9 @@ export function getArticles(query, page,id) {
   //     categoryId: query.categoryId
   //   }
   // })
-  return new Promise((resolve, reject) =>{axios.get('/api/article?id='+id+'&&offset=0&limit=9999')
+  let offset=(page.pageNumber-1)*page.pageSize
+  let limit=page.pageSize
+  return new Promise((resolve, reject) =>{axios.get('/api/article?id='+id+'&&offset='+offset+'&limit='+limit)
   .then(response => {
       // post 成功，response.data 为返回的数据
       // console.log(response.data);
@@ -125,6 +127,28 @@ export function publishArticle(article,token) {
   //   data: article
   // })
       return new Promise((resolve, reject) =>{axios.post('/api/article?token='+token, article)
+      .then(response => {
+          // post 成功，response.data 为返回的数据
+          // console.log(response.data);
+          resolve(response);
+          
+      })
+      .catch(error => {
+          // 请求失败
+          // console.log(error);
+          // alert(2);
+          reject(error);
+      })
+    })
+}
+
+export function editArticle(article,token,aid) {
+  // return request({
+  //   url: '/articles/publish',
+  //   method: 'post',
+  //   data: article
+  // })
+      return new Promise((resolve, reject) =>{axios.put('/api/article/'+aid+'?token='+token, article)
       .then(response => {
           // post 成功，response.data 为返回的数据
           // console.log(response.data);

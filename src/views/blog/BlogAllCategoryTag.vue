@@ -2,8 +2,8 @@
   <div class="me-allct-body" v-title :data-title="categoryTagTitle" >
     <el-container class="me-allct-container">
       <el-main>
-        <el-tabs v-model="activeName">
-          <el-tab-pane label="文章分类" name="category">
+        <!-- <el-tabs v-model="activeName"> -->
+          <!-- <el-tab-pane label="文章分类" name="category">
             <ul class="me-allct-items">
               <li v-for="c in categorys" @click="view(c.id)" :key="c.id" class="me-allct-item">
                 <div class="me-allct-content">
@@ -19,10 +19,10 @@
                 </div>
               </li>
             </ul>
-          </el-tab-pane>
-          <el-tab-pane label="标签" name="tag">
+          </el-tab-pane> -->
+          <!-- <el-tab-pane label="标签" name="tag"> -->
             <ul class="me-allct-items">
-              <li v-for="t in tags" @click="view(t.id)" :key="t.id" class="me-allct-item">
+              <li v-for="t in tags" @click="view(t.tagId)" :key="t.tagId" class="me-allct-item">
                 <div class="me-allct-content">
                   <a class="me-allct-info">
                     <img class="me-allct-img" :src="t.avatar?t.avatar:defaultAvatar"/>
@@ -35,8 +35,8 @@
                 </div>
               </li>
             </ul>
-          </el-tab-pane>
-        </el-tabs>
+          <!-- </el-tab-pane> -->
+        <!-- </el-tabs> -->
       </el-main>
     </el-container>
   </div>

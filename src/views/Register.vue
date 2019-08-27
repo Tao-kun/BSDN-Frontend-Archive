@@ -28,7 +28,7 @@
       <div class="me-login-design">
         <p>Designed by
           <strong>
-            <router-link to="/" class="me-login-design-color">ForFun</router-link>
+            <router-link to="/" class="me-login-design-color">BSDN</router-link>
           </strong>
         </p>
       </div>
@@ -78,7 +78,10 @@
               that.$router.push({path: '/'})
             }).catch((error) => {
               if (error !== 'error') {
-                that.$message({message: error, type: 'error', showClose: true});
+                if(error.response.data.status==409){
+                  that.$message({message: '这个名字太热门了 求求你换一个吧QWQ~~~', type: 'error', showClose: true});
+                }
+                else{that.$message({message: error, type: 'error', showClose: true});}
               }
             })
 

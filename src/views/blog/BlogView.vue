@@ -48,15 +48,15 @@
 
           <div class="me-view-tag">
             标签：
-            <!--<el-tag v-for="t in article.tags" :key="t.id" class="me-view-tag-item" size="mini" type="success">{{t.tagname}}</el-tag>-->
-            <el-button @click="tagOrCategory('tag', t.id)" size="mini" type="primary" v-for="t in article.tagInfos" :key="t.id" round plain>{{t.tagname}}</el-button>
+            <!-- <el-tag v-for="t in article.tagInfos" :key="t.tagId" class="me-view-tag-item" size="mini" type="success">{{t.tagName}}</el-tag> -->
+            <el-button v-for="t in article.tagInfos" @click="tagOrCategory('tag', t.tagId)" size="mini" type="primary" :key="t.tagId" round plain>{{t.tagName}}</el-button>
           </div>
 
-          <div class="me-view-tag">
+          <!-- <div class="me-view-tag">
             文章分类：
-            <!--<span style="font-weight: 600">{{article.category.categoryname}}</span>-->
+            <span style="font-weight: 600">{{article.category.categoryname}}</span>
             <el-button @click="tagOrCategory('category', article.category.id)" size="mini" type="primary" round plain>{{article.category.categoryname}}</el-button>
-          </div>
+          </div> -->
 
           <div class="me-view-comment">
             <div class="me-view-comment-write">
@@ -94,7 +94,7 @@
               :comment="c"
               :articleId="article.articleId"
               :index="index"
-              :rootCommentCount="comments.length"
+              :rootCommentCounts="comments.length"
               @commentCountIncrement="commentCountIncrement"
               :key="c.id">
             </commment-item>
@@ -113,7 +113,7 @@
   import CommmentItem from '@/components/comment/CommentItem'
   import {viewArticle} from '@/api/article'
   import {getCommentsByArticle, publishComment} from '@/api/comment'
-
+  import {getToken} from '@/request/token'
   import default_avatar from '@/assets/img/default_avatar.png'
 
   export default {
@@ -177,9 +177,10 @@
         viewArticle(that.$route.params.id).then(data => {
           // alert("ok");
           Object.assign(that.article, data.data.data)
+          // alert(JSON.stringify(data.data.data.tagInfos))
           that.article.editor.value = data.data.data.content
           
-          // that.getCommentsByArticle()
+          that.getCommentsByArticle()
         }).catch(error => {
           // alert("bad");
           if (error !== 'error') {
@@ -194,9 +195,18 @@
         }
         that.comment.article.articleId = that.article.articleId
 
-        publishComment(that.comment).then(data => {
+        publishComment(that.article.articleId,that.comment.content,getToken()).then(data => {
           that.$message({type: 'success', message: '评论成功', showClose: true})
-          that.comments.unshift(data.data)
+          // that.comments.unshift(data)
+           getCommentsByArticle(that.article.articleId).then(data => {
+            that.comments = data.data.data
+            // alert(JSON.stringify(that.comments))
+          }).catch(error => {
+            // alert("no")
+            if (error !== 'error') {
+              that.$message({type: 'error', message: '评论加载失败', showClose: true})
+            }
+          })
           that.commentCountIncrement()
           that.comment.content = ''
         }).catch(error => {
@@ -206,10 +216,13 @@
         })
       },
       getCommentsByArticle() {
+        // alert("in")
         let that = this
         getCommentsByArticle(that.article.articleId).then(data => {
           that.comments = data.data.data
+          // alert(JSON.stringify(that.comments))
         }).catch(error => {
+          // alert("no")
           if (error !== 'error') {
             that.$message({type: 'error', message: '评论加载失败', showClose: true})
           }

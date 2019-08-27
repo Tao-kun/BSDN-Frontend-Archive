@@ -5,7 +5,7 @@
       </video>-->
 
     <div class="me-login-box me-login-box-radius">
-      <h1>ForFun 登录</h1>
+      <h1>BSDN 登录</h1>
 
       <el-form ref="userForm" :model="userForm" :rules="rules">
         <el-form-item prop="account">
@@ -24,7 +24,7 @@
       <div class="me-login-design">
         <p>Designed by
           <strong>
-            <router-link to="/" class="me-login-design-color">ForFun</router-link>
+            <router-link to="/" class="me-login-design-color">BSDN</router-link>
           </strong>
         </p>
       </div>
@@ -65,7 +65,10 @@
               that.$router.go(-1)
             }).catch((error) => {
               if (error !== 'error') {
-                that.$message({message: error, type: 'error', showClose: true});
+                if(error.response.data.status==409){
+                  that.$message({message: '用户名或密码记错了哟 再想想吧~~~', type: 'error', showClose: true});
+                }
+                else{that.$message({message: error, type: 'error', showClose: true});}
               }
             })
           } else {
