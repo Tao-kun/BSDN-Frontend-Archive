@@ -18,8 +18,8 @@
         <!--<a class="me-view-comment-tool">-->
         <!--<i class="el-icon-caret-top"></i> 20-->
         <!--</a>-->
-        <a class="me-view-comment-tool" @click="showComment(-1)">
-          <i class="me-icon-comment"></i>&nbsp; 评论
+        <a class="me-view-comment-tool" @click="deleteComment()">
+          <i class="el-icon-delete"></i>&nbsp; 删除
         </a>
       </div>
 
@@ -65,6 +65,8 @@
 <script>
   import {getUserById} from '@/api/login'
   import {publishComment} from '@/api/comment'
+  import {deleteComment} from '@/api/comment'
+  import {getToken} from '@/request/token'
 
   export default {
     name: "CommentItem",
@@ -110,6 +112,19 @@
           this.commentShow = false
           this.commentShowIndex = ''
         }
+      },
+      deleteComment(){
+        let that=this
+        deleteComment(that.comment.commentId,getToken()).then(data => {
+          that.$message({type: 'success', message: '删除成功', showClose: true})
+          that.$emit('getCommentsByArticle')
+          that.$emit('commentCountDecrement')
+        }).catch(error => {
+          if (error !== 'error') {
+            that.$message({type: 'error', message: '删除失败', showClose: true})
+          }
+        })
+          
       },
       publishComment() {
         let that = this

@@ -164,6 +164,28 @@ export function editArticle(article,token,aid) {
     })
 }
 
+export function deleteArticleById(token,aid) {
+  // return request({
+  //   url: '/articles/publish',
+  //   method: 'post',
+  //   data: article
+  // })
+      return new Promise((resolve, reject) =>{axios.delete('/api/article?id='+aid+'&token='+token)
+      .then(response => {
+          // post 成功，response.data 为返回的数据
+          // console.log(response.data);
+          resolve(response);
+          
+      })
+      .catch(error => {
+          // 请求失败
+          // console.log(error);
+          // alert(2);
+          reject(error);
+      })
+    })
+}
+
 export function listArchives() {
   return request({
     url: '/articles/listArchives',

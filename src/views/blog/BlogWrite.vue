@@ -3,7 +3,7 @@
     <el-container>
       <base-header :simple=true>
         <el-col :span="4" :offset="2">
-          <div class="me-write-info">写文章</div>
+          <div class="me-write-info">{{title}}</div>
         </el-col>
         <el-col :span="4" :offset="6">
           <div class="me-write-btn">
@@ -81,6 +81,7 @@
       if(this.$route.params.id){
         this.isEditMode=true
         this.oktxt='保存'
+        this.title='编辑文章'
         this.getArticleById(this.$route.params.id)
       }
 
@@ -96,6 +97,7 @@
       return {
         publishVisible: false,
         isEditMode:false,
+        title:'写文章',
         categorys: [],
         oktxt:'发布',
         articleTags: [],
@@ -150,9 +152,7 @@
       }
     },
     computed: {
-      title (){
-        return '写文章'
-      }
+      
     },
     methods: {
       getArticleById(id) {
@@ -242,7 +242,7 @@
 
               loading.close();      
               that.$message({message: '修改成功啦', type: 'success', showClose: true})
-              that.$router.push({path: `/view/${data.data.data.articleId}`})
+              that.$router.push({path: `/view/${this.articleForm.articleId}`})
 
             }).catch((error) => {
               loading.close();

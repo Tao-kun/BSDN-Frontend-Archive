@@ -24,6 +24,8 @@
 }
 .me-icon-comment:before { content: "\e617"; }
 
+.me-icon-delete:before { content: "\e617"; }
+
 .me-icon-QQ:before { content: "\e73e"; }
 
 .me-icon-github:before { content: "\e6be"; }

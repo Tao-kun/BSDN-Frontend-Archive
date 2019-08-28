@@ -32,6 +32,13 @@
               size="mini"
               round
               icon="el-icon-edit">编辑</el-button>
+              <el-button
+              v-if="this.article.userId == this.$store.state.id"
+              @click="deleteArticle()"
+              style="position: absolute;left: 66%;"
+              size="mini"
+              round
+              icon="el-icon-delete">删除</el-button>
           </div>
           <div class="me-view-content">
             <markdown-editor :editor=article.editor></markdown-editor>
@@ -96,6 +103,8 @@
               :index="index"
               :rootCommentCounts="comments.length"
               @commentCountIncrement="commentCountIncrement"
+              @commentCountDecrement="commentCountDecrement"
+              @getCommentsByArticle="getCommentsByArticle"
               :key="c.id">
             </commment-item>
 
@@ -111,7 +120,7 @@
 <script>
   import MarkdownEditor from '@/components/markdown/MarkdownEditor'
   import CommmentItem from '@/components/comment/CommentItem'
-  import {viewArticle} from '@/api/article'
+  import {viewArticle,deleteArticleById} from '@/api/article'
   import {getCommentsByArticle, publishComment} from '@/api/comment'
   import {getToken} from '@/request/token'
   import default_avatar from '@/assets/img/default_avatar.png'
@@ -188,6 +197,32 @@
           }
         })
       },
+      deleteArticle(){
+        
+        this.$confirm('文章将会从地球上消失，是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          // alert("ok")
+          let loading = this.$loading({
+              lock: true,
+              text: ' 删除中，请稍后...'
+            })
+          deleteArticleById(getToken(),this.article.articleId).then((data) => {
+              loading.close();   
+              this.$message({message: '删除成功啦', type: 'success', showClose: true})
+              this.$router.push('/')
+
+            }).catch((error) => {
+              loading.close();
+              if (error !== 'error') {
+                that.$message({message: error, type: 'error', showClose: true});
+              }
+            })
+          
+        })
+      },
       publishComment() {
         let that = this
         if (!that.comment.content) {
@@ -198,15 +233,16 @@
         publishComment(that.article.articleId,that.comment.content,getToken()).then(data => {
           that.$message({type: 'success', message: '评论成功', showClose: true})
           // that.comments.unshift(data)
-           getCommentsByArticle(that.article.articleId).then(data => {
-            that.comments = data.data.data
-            // alert(JSON.stringify(that.comments))
-          }).catch(error => {
-            // alert("no")
-            if (error !== 'error') {
-              that.$message({type: 'error', message: '评论加载失败', showClose: true})
-            }
-          })
+          //  getCommentsByArticle(that.article.articleId).then(data => {
+          //   that.comments = data.data.data
+          //   // alert(JSON.stringify(that.comments))
+          // }).catch(error => {
+          //   // alert("no")
+          //   if (error !== 'error') {
+          //     that.$message({type: 'error', message: '评论加载失败', showClose: true})
+          //   }
+          // })
+          that.getCommentsByArticle()
           that.commentCountIncrement()
           that.comment.content = ''
         }).catch(error => {
@@ -230,6 +266,9 @@
       },
       commentCountIncrement() {
         this.article.commentCount += 1
+      },
+      commentCountDecrement() {
+        this.article.commentCount -= 1
       }
     },
     components: {

@@ -54,4 +54,26 @@ export function publishComment(aid,content,token) {
   })
 }
 
+export function deleteComment(cid,token) {
+    return new Promise((resolve, reject) =>{axios.delete('/api/comment?id='+cid+'&token='+token)
+    .then(response => {
+        // post 成功，response.data 为返回的数据
+        // console.log(response.data);
+        // alert(1);
+        // alert("ok")
+        resolve(response);
+  
+        
+    })
+    .catch(error => {
+        // 请求失败
+        // console.log(error);
+        // alert(2);
+        // alert(JSON.stringify(data))
+        // alert("bad")
+        reject(error);
+    })
+    })
+  }
+
 

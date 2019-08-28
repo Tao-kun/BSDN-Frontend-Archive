@@ -3,7 +3,7 @@
     <h1 class="me-author-name">cjeen</h1>
     <div class="me-author-description">
       <span><i class="el-icon-location-outline"></i> &nbsp;火星</span>
-      <span><i class="me-icon-job"></i> &nbsp;java开发工程师</span>
+      <span><i class="me-icon-job"></i> &nbsp;火星采矿师</span>
     </div>
     <div class="me-author-tool">
       <i @click="showTool(qq)" :title="qq.title" class="me-icon-QQ"></i>
@@ -18,10 +18,10 @@
     name: 'CardMe',
     data() {
       return {
-        qq: {title: 'QQ', message: '919431514'},
+        qq: {title: 'QQ', message: '860360956'},
         github: {
           title: 'github',
-          message: '<a target="_blank" href="https://github.com/shimh-develop">https://github.com/shimh-develop</a>'
+          message: '<a target="_blank" href="https://github.com/cjeen">https://github.com/cjeen</a>'
         }
       }
     },

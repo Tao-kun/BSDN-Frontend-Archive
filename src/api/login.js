@@ -1,10 +1,24 @@
 // import request from '@/request'
 import axios from 'axios'
+import crypto from 'crypto'
 
-export function login(email, passwordHash) {
+function getMD5(pass){
+
+    let md5 = crypto.createHash("md5");
+
+    md5.update(pass);
+
+    return md5.digest('hex')
+
+}
+
+export function login(email, password) {
+    let passMd5 = getMD5(password.trim());
+    let pass = getMD5(passMd5 + 'BSDN');
+
   const data = {
     email,
-    passwordHash
+    passwordHash:pass
   }
   return new Promise((resolve, reject) =>{axios.post('/api/session', data)
   .then(response => {
@@ -24,6 +38,9 @@ export function login(email, passwordHash) {
   })
   })
 }
+
+
+
 
 export function logout(token) {
   return new Promise((resolve, reject) =>{axios.delete('/api/session?token='+token)
@@ -113,11 +130,15 @@ export function getUserById(userID) {
     })
   }
 
-export function register(email, nickname, passwordHash) {
+export function register(email, nickname, password) {
+
+    let passMd5 = getMD5(password.trim());
+    let pass = getMD5(passMd5 + 'BSDN');
+
   const data = {
     email,
     nickname,
-    passwordHash
+    passwordHash:pass
   }
   // return request({
   //   url: '/api/user',
