@@ -14,7 +14,7 @@
 	import baseHeader from "../views/BaseHeader.vue"
 	
 	export default {
-	  name: 'HelloWorld',
+	  name: 'userSpace',
 	  data () {
 	    return {
 			

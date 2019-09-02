@@ -163,7 +163,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   .me-view-tag-item {
     margin: 0 4px;
   }

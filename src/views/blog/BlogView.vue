@@ -12,12 +12,31 @@
 
         <div class="me-view-card">
           <h1 class="me-view-title">{{article.title}}</h1>
+          <zan></zan>
           <div class="me-view-author">
             <a class="">
               <!-- <img class="me-view-picture" :src="article.author.avatar"></img> -->
             </a>
             <div class="me-view-info">
-              <span>{{nickName}}</span>
+              <!-- <span>{{nickName}}</span>
+               -->
+               <div id="nameAndGender" >
+                 <a>
+							<div style="height: 30px;line-height: 30px;float: left;font-size: 20px;" @click="gohishome">
+								{{userName}}
+							</div>
+              </a>
+							<!-- <div v-if="userGender == 'male'" style="float: left;"><img src="../../assets/male.png" style="height: 20px;margin-top: 5px;margin-left: 5px;"/></div> -->
+							<!-- <div v-else style="float: left;height: 40px;"><img src="../../assets/female.png" style="height: 20px;margin-top: 5px;margin-left: 5px;"/></div> -->
+							
+							
+						</div>
+              <div class="userSpaceUserInfos" style="border-left: rgb(158, 228, 50) 1px solid;padding-left: 5px;">
+							<div v-for="u in userInfos" style="height: 30px;float: left;border-right: rgb(158, 228, 50) 1px solid;margin-right: 5px;padding-right: 5px;">
+								<div style="height: 15px;font-size:15px;">{{u.partNum}}</div>
+								<div style="height: 8px;margin-top: 2px;font-size: 10px;">{{u.partName}}</div>
+							</div>
+						</div>
               <div class="me-view-meta">
                 <span>{{article.publishDate | format}}</span>
                 <span>阅读   {{article.viewNumber}}</span>
@@ -123,7 +142,9 @@
   import {viewArticle,deleteArticleById} from '@/api/article'
   import {getCommentsByArticle, publishComment} from '@/api/comment'
   import {getToken} from '@/request/token'
+  import {getUserById,favor,unfavor,checkfavor} from '@/api/login'
   import default_avatar from '@/assets/img/default_avatar.png'
+  import zan from '../../components/blogComponents/zan_article.vue'
 
   export default {
     name: 'BlogView',
@@ -135,13 +156,28 @@
     },
     data() {
       return {
+        author_info:{
+	            nickname:"Eddie Peng",
+              avatarUrl:"static/avatar1.png",
+              articleCount:13,
+              userFollowerCount:10,
+              userFollowingCount:8,
+          },
+        userName: "hhd",
+				  userGender: "male",
+				  userIntro: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+			  	userInfos:[
+					{partName:"关注",partNum:0},
+					{partName:"粉丝",partNum:1},
+					{partName:"文章",partNum:2},
+				],
+				nickName:"nmsl", 
         article: {
           articleId: '',
           title: '',
           commentCount: 0,
           viewNumber: 0,
           summary: '',
-          nickName: '',
           userId:'',
           tagInfos: [],
           category:{},
@@ -174,6 +210,9 @@
       }
     },
     methods: {
+      userSpaceFollow() {
+
+			},
       tagOrCategory(type, id) {
         this.$router.push({path: `/${type}/${id}`})
       },
@@ -185,11 +224,15 @@
         // alert(that.$route.params.id)
         viewArticle(that.$route.params.id).then(data => {
           // alert("ok");
+          
           Object.assign(that.article, data.data.data)
+          
           // alert(JSON.stringify(data.data.data.tagInfos))
           that.article.editor.value = data.data.data.content
           
           that.getCommentsByArticle()
+          
+          that.getUser()
         }).catch(error => {
           // alert("bad");
           if (error !== 'error') {
@@ -197,6 +240,30 @@
           }
         })
       },
+      getUser() {
+				let that = this
+        // alert(that.$route.params.id)
+        getUserById(that.article.userId).then(data => {
+          // alert("ok");
+          Object.assign(that.author_info, data.data.data)
+					// alert(JSON.stringify(data.data.data.tagInfos))
+					if (!this.author_info.avatarUrl || typeof(this.author_info.avatarUrl)=="undefined") 
+					{ 
+					this.author_info.avatarUrl="static/avatar1.png"
+          }　
+          this.userInfos[0].partNum=this.author_info.userFollowingCount
+          this.userInfos[1].partNum=this.author_info.userFollowerCount
+          this.userInfos[2].partNum=this.author_info.articleCount
+          // alert()
+          that.userName=that.author_info.nickname
+					// alert(this.avatarUrl)
+        }).catch(error => {
+          // alert("bad");
+          if (error !== 'error') {
+            that.$message({type: 'error', message: '用户加载失败', showClose: true})
+          }
+        })
+			},
       deleteArticle(){
         
         this.$confirm('文章将会从地球上消失，是否继续?', '提示', {
@@ -269,11 +336,15 @@
       },
       commentCountDecrement() {
         this.article.commentCount -= 1
+      },
+      gohishome(){
+        this.$router.push('/userspace/'+this.article.userId)
       }
     },
     components: {
       'markdown-editor': MarkdownEditor,
-      CommmentItem
+      CommmentItem,
+      zan
     },
     //组件内的守卫 调整body的背景色
     beforeRouteEnter(to, from, next) {
@@ -288,6 +359,32 @@
 </script>
 
 <style>
+  #nameAndGender:after {
+		content: "";
+		display: block;
+		clear: both;
+		
+	}
+  .userSpaceUserInfos:after {
+		content: "";
+		display: block;
+		clear: both;
+	}
+
+
+	#userSpaceFollow {
+		float: left;
+		margin-top: 30px;
+		margin-left: 10px;
+		border: white 1px solid;
+		border-radius: 5px;
+		font-size: 15px;
+		color: white;
+	}
+
+	#userSpaceFollow:hover {
+		background-color: #00D1B2;
+	}
   .me-view-body {
     margin: 100px auto 140px;
   }

@@ -46,7 +46,7 @@
 <script>
 	import turnPage from "../components/turnPage.vue"
 	export default {
-	  name: 'userSpaceHead',
+	  name: 'sduserSpaceMain',
 	  components: {
 		  turnPage
 	  },
@@ -118,7 +118,7 @@
 	})
 </script>
 
-<style>
+<style scoped>
 	#maintopfont{
 		height: 200px;
 		font-size: 50px;

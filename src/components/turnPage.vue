@@ -43,7 +43,7 @@
 	}
 
 	export default {
-	  name: 'turnPage',
+	  name: 'sdturnPage',
 	  data () {
 	    return {
 	      curpage: computePage(window.location.href),
@@ -62,7 +62,7 @@
 	
 </script>
 
-<style>
+<style scoped>
 	#turnpage {
 		border-radius: 15px;
 		height: 50px;

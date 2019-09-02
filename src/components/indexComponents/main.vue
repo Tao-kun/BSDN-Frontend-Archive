@@ -26,7 +26,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	#myMain:after{
 		content: "";
 		display: block;

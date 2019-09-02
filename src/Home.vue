@@ -7,16 +7,23 @@
 		  <router-view class="me-container"/>
 		  
 			<base-footer v-show="footerShow"></base-footer>
+			
+			 
 		  
 		</el-container>
 		
-  </div>
+  </div> 
+	
+	<!-- <router-view/> -->
   
 </template>
 
 <script>
-import BaseFooter from '@/components/BaseFooter'
+// import BaseFooter from '@/components/BaseFooter'
 import BaseHeader from '@/views/BaseHeader'
+
+import BaseFooter from '@/components/homeComponents/footer.vue'
+// import BaseHeader from '@/components/homeComponents/header.vue'
 
 export default {
   name: 'Home',

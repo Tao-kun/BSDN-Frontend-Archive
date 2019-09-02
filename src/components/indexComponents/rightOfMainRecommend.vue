@@ -54,7 +54,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	#recommendHead:after{
 		content: "";
 		display: block;

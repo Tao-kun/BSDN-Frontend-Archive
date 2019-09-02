@@ -19,7 +19,29 @@ module.exports = {
         pathRewrite: {
           '^/api': '/api'
         }
-      }
+      },
+      '/file': {
+          target: 'http://114.115.128.109:80',
+          changeOrigin: true,
+          pathRewrite: {
+            '^/file': '/file'
+          }
+      },
+      // '/file': {
+      //   target: 'http://114.115.128.109:80',
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     '^/file': '/file'
+      //   }
+      // },
+      // http://blog.shiminghui.top/
+      // '/upload': {
+      //   target: 'http://blog.shiminghui.top',
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     '^/upload': '/upload'
+      //   }
+      // },
     },
 
     // Various Dev Server settings

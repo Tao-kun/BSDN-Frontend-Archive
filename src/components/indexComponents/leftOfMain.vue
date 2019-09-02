@@ -71,7 +71,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	#normalPage{
 		width: 100%;
 	}

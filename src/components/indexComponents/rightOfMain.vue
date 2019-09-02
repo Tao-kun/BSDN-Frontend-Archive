@@ -23,7 +23,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	#rightOfMain:after{
 		content: "";
 		display: block;

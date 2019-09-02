@@ -14,7 +14,7 @@
 <script>
 
   export default {
-    name: 'BaseFooter',
+    name: 'sdBaseFooter',
     data() {
       return {}
     },
@@ -24,7 +24,7 @@
   }
 </script>
 
-<style>
+<style scoped>
 
   .el-footer {
     min-width: 100%;

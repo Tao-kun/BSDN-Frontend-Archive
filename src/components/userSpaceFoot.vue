@@ -22,7 +22,7 @@
 
 <script>
 	export default {
-	  name: 'userSpaceHead',
+	  name: 'sduserSpaceFoot',
 	  data () {
 	    return {
 	     homeurl: "jump.html",
@@ -70,7 +70,7 @@
 	})
 </script>
 
-<style>
+<style scoped>
 	#footer{
 		background-color: #9caebf;
 		height: 100px;

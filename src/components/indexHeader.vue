@@ -34,7 +34,7 @@
 
 <script>
 	export default {
-	  name: 'userSpaceHead',
+	  name: 'sduserSpaceHead',
 	  data () {
 	    return {
 	      navurl: "jump.html",
@@ -134,7 +134,7 @@
 
 
 
-<style>
+<style scoped>
 	#navigator{
 		height: 300px;
 		background-color: rgb(156, 174, 191);

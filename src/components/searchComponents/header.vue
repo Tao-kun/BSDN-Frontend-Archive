@@ -41,7 +41,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 	#myHeader:after{
 		content: "";
 		display: block;

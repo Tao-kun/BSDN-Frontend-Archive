@@ -11,6 +11,7 @@ import BlogView from '@/views/blog/BlogView'
 import BlogAllCategoryTag from '@/views/blog/BlogAllCategoryTag'
 import BlogCategoryTag from '@/views/blog/BlogCategoryTag'*/
 
+
 import {Message} from 'element-ui';
 
 
@@ -29,15 +30,46 @@ const router = new Router({
         requireLogin: true
       },
     },
+		{
+		  path: '/userspace/:id',
+		  component: r => require.ensure([], () => r(require('@/views/BSDNUserSpace')), 'userspace'),
+		},
+    {
+      path:'/userspace/fans/:id',
+      component: r => require.ensure([], () => r(require('@/views/Platefans')), 'index'),
+    },
+    
+    {
+      path:'/search/user/:content',
+      component: r => require.ensure([], () => r(require('@/views/searchuser')), 'index'),
+    },
+    {
+      path:'/search/article/:content',
+      component: r => require.ensure([], () => r(require('@/views/searcharticle')), 'index'),
+    },
+    {
+      path:'/userspace/favors/:id',
+      component: r => require.ensure([], () => r(require('@/views/Platefavors')), 'index'),
+    },
+		{
+		  path: '/',
+      // component: r => require.ensure([], () => r(require('@/views/BSDNUserSpace')), 'index')
+      // component: r => require.ensure([], () => r(require('@/views/PlatePython')), 'index')
+      component: r => require.ensure([], () => r(require('@/views/Plateindex')), 'index')
+		},
+
     {
       path: '',
       name: 'Home',
       component: Home,
       children: [
-        {
-          path: '/',
-          component: r => require.ensure([], () => r(require('@/views/Index')), 'index')
-        },
+     //    {
+     //      path: '/',
+     //      component: r => require.ensure([], () => r(require('@/views/Index')), 'index')
+					// // component: r => require.ensure([], () => r(require('@/views/BSDNIndex')), 'index')
+					// // component: r => require.ensure([], () => r(require('@/views/BSDNUserSpace')), 'index')
+     //    },
+        
         {
           path: '/log',
           component: r => require.ensure([], () => r(require('@/views/Log')), 'log')
@@ -69,14 +101,24 @@ const router = new Router({
       component: r => require.ensure([], () => r(require('@/views/Login')), 'login')
     },
     {
+      path: '/userinfo',
+      component: r => require.ensure([], () => r(require('@/views/userInfos')), 'log')
+    },
+    {
       path: '/register',
       component: r => require.ensure([], () => r(require('@/views/Register')), 'register')
-    }
+    },
 
+		// {
+		//   path: '/',
+		//   component: r => require.ensure([], () => r(require('@/views/BSDNIndex')), 'index')
+    // },
+    // {
+    //   path: '/searchresult',
+    //   component: r => require.ensure([], () => r(require('@/views/SearchResult')), 'log')
+    // },
   ],
-  scrollBehavior(to, from, savedPosition) {
-    return {x: 0, y: 0}
-  }
+
 })
 
 router.beforeEach((to, from, next) => {

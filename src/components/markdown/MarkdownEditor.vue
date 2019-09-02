@@ -15,7 +15,7 @@
   import 'mavon-editor/dist/css/index.css'
 
   import {upload} from '@/api/upload'
-
+  import {getToken} from '@/request/token'
   export default {
     name: 'MarkdownEditor',
     props: {
@@ -31,17 +31,18 @@
       imgAdd(pos, $file) {
         let that = this
         let formdata = new FormData();
-        formdata.append('image', $file);
-
-        upload(formdata).then(data => {
+        // formdata.set('userName', 'Fred');
+        formdata.append('file', $file);
+        upload(formdata,getToken()).then(data => {
+          // alert(data.data.data)
           // 第二步.将返回的url替换到文本原位置![...](./0) -> ![...](url)
-          if (data.code == 0) {
+          // if (data.code == 0) {
 
-            that.$refs.md.$img2Url(pos, data.data.url);
-          } else {
-            that.$message({message: data.msg, type: 'error', showClose: true})
-          }
-
+          //   that.$refs.md.$img2Url(pos, data.data.url);
+          // } else {
+          //   that.$message({message: data.msg, type: 'error', showClose: true})
+          // }
+        that.$refs.md.$img2Url(pos, data.data.data);
         }).catch(err => {
           that.$message({message: err, type: 'error', showClose: true});
         })

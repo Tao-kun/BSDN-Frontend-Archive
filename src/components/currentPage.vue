@@ -6,7 +6,7 @@
 
 <script>
 	export default {
-		name: 'userSpaceHead',
+		name: 'sduserSpaceHead',
 		components: {
 			
 		},
@@ -18,7 +18,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	#currentPage {
 		border-radius: 50%;
 		background-color: white;

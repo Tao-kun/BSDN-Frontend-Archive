@@ -1,5 +1,6 @@
 <template>
-  <div id="register" v-title data-title="注册 - For Fun">
+  <div :style="backgroundDiv" class="background-img">
+  <div id="register" v-title data-title="注册">
     <!--<video preload="auto" class="me-video-player" autoplay="autoplay" loop="loop">
           <source src="../../static/vedio/sea.mp4" type="video/mp4">
       </video>-->
@@ -9,7 +10,7 @@
 
       <el-form ref="userForm" :model="userForm" :rules="rules">
         <el-form-item prop="account">
-          <el-input placeholder="用户名" v-model="userForm.account"></el-input>
+          <el-input  placeholder="邮箱" v-model="userForm.account" show-email></el-input>
         </el-form-item>
 
         <el-form-item prop="nickname">
@@ -17,24 +18,28 @@
         </el-form-item>
 
         <el-form-item prop="password">
-          <el-input placeholder="密码" v-model="userForm.password"></el-input>
+          <el-input placeholder="密码" v-model="userForm.password" show-password></el-input>
+        </el-form-item>
+        <el-form-item prop="repassword">
+          <el-input placeholder="确认密码" v-model="userForm.repassword" show-password></el-input>
         </el-form-item>
 
-        <el-form-item size="small" class="me-login-button">
+        <el-form-item size="middle" class="me-login-button">
           <el-button type="primary" @click.native.prevent="register('userForm')">注册</el-button>
         </el-form-item>
       </el-form>
 
-      <div class="me-login-design">
+      <!-- <div class="me-login-design">
         <p>Designed by
           <strong>
-            <router-link to="/" class="me-login-design-color">BSDN</router-link>
+            <router-link to="/" class="me-login-design-color">ForFun</router-link>
           </strong>
         </p>
-      </div>
+      </div> -->
 
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -43,16 +48,30 @@
   export default {
     name: 'Register',
     data() {
+      var validatePass = (rule, value, callback) => {            
+        if (value === '') {
+          callback(new Error('请再次输入密码'));
+        } else if (value !== this.userForm.password) {
+          callback(new Error('两次输入密码不一致!'));
+        } else {
+          callback();
+        }
+      };
+
       return {
+        backgroundDiv:{
+          backgroundImage:'url('+require('@/assets/body.png')+')'
+        },
         userForm: {
           account: '',
           nickname: '',
-          password: ''
+          password: '',
+          repassword: ''
         },
         rules: {
           account: [
-            {required: true, message: '请输入用户名', trigger: 'blur'},
-            {max: 10, message: '不能大于10个字符', trigger: 'blur'}
+            {required: true, message: '请输入邮箱', trigger: 'blur'},
+            { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
           ],
           nickname: [
             {required: true, message: '请输入昵称', trigger: 'blur'},
@@ -60,8 +79,16 @@
           ],
           password: [
             {required: true, message: '请输入密码', trigger: 'blur'},
-            {max: 10, message: '不能大于10个字符', trigger: 'blur'}
+            {max: 10, message: '不能大于10个字符', trigger: 'blur'},
+            {min: 6, message: '不能少于6个字符', trigger: 'blur'}
+          ],
+          repassword: [
+            {required: true, message: '请输入密码', trigger: 'blur'},
+            {max: 10, message: '不能大于10个字符', trigger: 'blur'},
+            {min: 6, message: '不能少于6个字符', trigger: 'blur'},
+            {validator: validatePass, trigger: 'blur'}
           ]
+
         }
 
       }
@@ -81,7 +108,9 @@
                 if(error.response.data.status==409){
                   that.$message({message: '这个名字太热门了 求求你换一个吧QWQ~~~', type: 'error', showClose: true});
                 }
-                else{that.$message({message: error, type: 'error', showClose: true});}
+                else{
+                  that.$message({message: error, type: 'error', showClose: true});
+                }
               }
             })
 
@@ -117,7 +146,7 @@
   .me-login-box {
     position: absolute;
     width: 300px;
-    height: 320px;
+    height: 370px;
     background-color: white;
     margin-top: 150px;
     margin-left: -180px;
@@ -149,10 +178,17 @@
 
   .me-login-button {
     text-align: center;
+    /* height: 40px; */
   }
 
   .me-login-button button {
     width: 100%;
+  }
+  .background-img{
+    background:no-repeat;
+    background-size:100%;
+    height:800px;
+    width:100%;
   }
 
 </style>

@@ -44,7 +44,7 @@
 	var that
 	
 	export default {
-		name: 'indexMain',
+		name: 'sdindexMain',
 		data() {
 			return {
 				piclist:[
@@ -80,7 +80,7 @@
 	
 </script>
 
-<style>
+<style scoped>
 	#indexMain {
 		width: 100%;
 	}

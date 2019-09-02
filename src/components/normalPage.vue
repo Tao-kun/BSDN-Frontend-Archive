@@ -34,7 +34,7 @@
 
 <script>
 	export default {
-		name: 'indexMain',
+		name: 'sdnora',
 		data() {
 			return {
 				contentlist:[
@@ -68,7 +68,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	#normalPage{
 		/* border-radius: 50%; */
 		/* background-color: white; */

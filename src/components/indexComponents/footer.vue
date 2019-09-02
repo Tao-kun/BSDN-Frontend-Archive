@@ -69,7 +69,7 @@
 	})
 </script>
 
-<style>
+<style scoped>
 	#footer{
 		background-color: #dbe0e4;
 		height: 100px;

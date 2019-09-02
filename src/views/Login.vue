@@ -1,35 +1,38 @@
 <template>
-  <div id="login" v-title data-title="登录 - For Fun">
+  <div :style="backgroundDiv" class="background-img">
+  <div id="login" v-title data-title="登录 - BSDN">
     <!--<video preload="auto" class="me-video-player" autoplay="autoplay" loop="loop">
           <source src="../../static/vedio/sea.mp4" type="video/mp4">
       </video>-->
 
     <div class="me-login-box me-login-box-radius">
-      <h1>BSDN 登录</h1>
+      
+      <h1>登录</h1>
 
       <el-form ref="userForm" :model="userForm" :rules="rules">
         <el-form-item prop="account">
-          <el-input placeholder="用户名" v-model="userForm.account"></el-input>
+          <el-input placeholder="用户名/邮箱" v-model="userForm.account"></el-input>
         </el-form-item>
 
         <el-form-item prop="password">
           <el-input placeholder="密码" type="password" v-model="userForm.password"></el-input>
         </el-form-item>
 
-        <el-form-item size="small" class="me-login-button">
+        <el-form-item size="middle" class="me-login-button">
           <el-button type="primary" @click.native.prevent="login('userForm')">登录</el-button>
         </el-form-item>
       </el-form>
 
-      <div class="me-login-design">
+      <!-- <div class="me-login-design">
         <p>Designed by
           <strong>
-            <router-link to="/" class="me-login-design-color">BSDN</router-link>
+            <router-link to="/" class="me-login-design-color">ForFun</router-link>
           </strong>
         </p>
-      </div>
+      </div> -->
 
     </div>
+  </div>
   </div>
 </template>
 
@@ -38,18 +41,21 @@
     name: 'Login',
     data() {
       return {
+        backgroundDiv:{
+          backgroundImage:'url('+require('@/assets/body.png')+')'
+        },
         userForm: {
           account: '',
           password: ''
         },
         rules: {
           account: [
-            {required: true, message: '请输入用户名', trigger: 'blur'},
-            {max: 10, message: '不能大于10个字符', trigger: 'blur'}
+            {required: true, message: '请输入用户名或邮箱', trigger: 'blur'},
+            {max: 30, message: '不能大于30个字符', trigger: 'blur'}
           ],
           password: [
             {required: true, message: '请输入密码', trigger: 'blur'},
-            {max: 10, message: '不能大于10个字符', trigger: 'blur'}
+            {max: 20, message: '不能大于20个字符', trigger: 'blur'}
           ]
         }
       }
@@ -68,7 +74,10 @@
                 if(error.response.data.status==409){
                   that.$message({message: '用户名或密码记错了哟 再想想吧~~~', type: 'error', showClose: true});
                 }
-                else{that.$message({message: error, type: 'error', showClose: true});}
+                else{
+                  that.$message({message: error, type: 'error', showClose: true});
+                }
+                
               }
             })
           } else {
@@ -137,6 +146,12 @@
 
   .me-login-button button {
     width: 100%;
+  }
+  .background-img{
+    background:no-repeat;
+    background-size:100%;
+    height:800px;
+    width:100%;
   }
 
 </style>

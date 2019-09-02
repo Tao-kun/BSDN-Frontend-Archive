@@ -1,28 +1,28 @@
 <template>
 	<div>
-		<BSDNUserSpaceHeader></BSDNUserSpaceHeader>
+		<base-header :activeIndex="activeIndex"></base-header>
 		<BSDNUserSpaceMain id="BSDNUserSpaceMain"></BSDNUserSpaceMain>
 		<BSDNUserSpaceFooter id="BSDNUserSpaceFooter"></BSDNUserSpaceFooter>
 	</div>
-	
-	
-	
+
+
+
 </template>
 
 <script>
-	import BSDNUserSpaceHeader from "../components/userSpaceComponents/header.vue"
+	import BaseHeader from "./BaseHeader.vue"
 	import BSDNUserSpaceMain from "../components/userSpaceComponents/main.vue"
 	import BSDNUserSpaceFooter from "../components/userSpaceComponents/footer.vue"
-	
+
 	export default {
 	  name: 'BSDNUserSpace',
 	  data () {
 		return {
-		  
+
 		}
 	  },
 	  components:{
-		  BSDNUserSpaceHeader,
+		  BaseHeader,
 		  BSDNUserSpaceMain,
 		  BSDNUserSpaceFooter
 	  }
@@ -31,9 +31,9 @@
 
 <style>
 	#BSDNUserSpaceMain{
-		padding-top: 50px;
+		padding-top: 75px;
 	}
-	
+
 	#BSDNUserSpaceFooter{
 		margin-top: 50px;
 	}

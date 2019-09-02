@@ -1,7 +1,7 @@
 <template>
-	<div id="footer">
+	<div class="footer">
 			<!-- 还要给每个icon移入变色 -->
-			<div id="footicons">
+			<div class="footicons">
 				<div class="footicondiv">
 					<a :href="homeurl"><img src="static/home.png" class="footicon"/></a>
 				</div>
@@ -14,7 +14,7 @@
 				</div>
 			</div>
 			
-			<div id="copyright">@cxknmsl</div>
+			<div class="copyright">@cxknmsl</div>
 		</div>
 	</div>
 	
@@ -37,7 +37,7 @@
 	
 	$(function(){
 		//给最底下三个icon绑定
-		$("#footicons img").each(function(index){
+		$(".footicons img").each(function(index){
 			var that = this
 			this.onmouseenter = function(){
 				that.src = that.src.split(".png")[0] + "hover.png"
@@ -45,32 +45,12 @@
 			this.onmouseleave = function(){
 				that.src = that.src.split("hover.png")[0] + ".png"
 			}
-		})
-		
-		$("#turnleft").each(function(index){
-			var that = this
-			this.onmouseenter = function(){
-				that.src = that.src.split(".png")[0] + "hover.png"
-			}
-			this.onmouseleave = function(){
-				that.src = that.src.split("hover.png")[0] + ".png"
-			}
-		})
-		
-		$("#turnright").each(function(index){
-			var that = this
-			this.onmouseenter = function(){
-				that.src = that.src.split(".png")[0] + "hover.png"
-			}
-			this.onmouseleave = function(){
-				that.src = that.src.split("hover.png")[0] + ".png"
-			}
-		})
+		})		
 	})
 </script>
 
-<style>
-	#footer{
+<style scoped="userSpaceFooter">
+	.footer{
 		background-color: #dbe0e4;
 		height: 100px;
 		padding-top: 30px;
@@ -88,18 +68,19 @@
 		margin-left: 30%;
 	}
 	
-	#footicons{
+	.footicons{
 		width: 8%;
 		margin: 0 auto;
+		height: 50px;
 	}
 	
-	#footicons:after{
+	.footicons:after{
 		content: "";
 		display: block;
 		clear: both;
 	}
 	
-	#copyright{
+	.copyright{
 		color: white;
 		width: 20%;
 		margin: 20px auto;

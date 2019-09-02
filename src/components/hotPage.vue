@@ -15,7 +15,7 @@
 
 <script>
 	export default {
-		name: 'indexMain',
+		name: 'sdindexMain',
 		data() {
 			return {
 				contentlist:[
@@ -27,7 +27,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	#hotArticlesOuter{
 		width: 100%;
 	}
